@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Location;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -48,8 +49,18 @@ class DashboardController extends Controller
 
         $locations = $user->locations()
             ->whereDate('timestamp', $date)
-            ->orderBy('timestamp')
-            ->get();
+            ->orderBy('timestamp', 'desc')
+            ->get()
+            ->map(function ($loc) {
+                return (object) [
+                    'id'        => $loc->id,
+                    'latitude'  => $loc->latitude,
+                    'longitude' => $loc->longitude,
+                    'timestamp' => Carbon::parse($loc->timestamp)
+                        ->timezone('Asia/Makassar')
+                        ->format('d M Y H:i:s') . ' WITA',
+                ];
+            });
 
         $users = User::orderBy('name')->get();
 

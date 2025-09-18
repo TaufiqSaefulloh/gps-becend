@@ -30,6 +30,8 @@
             <div id="map" style="height:500px; border-radius: 10px;"></div>
         </div>
     </div>
+
+
     <!-- Table -->
     <div class="card shadow-sm border-0">
         <div class="card-header bg-primary text-white">
@@ -59,17 +61,23 @@
                 <table class="table align-middle table-hover mb-0">
                     <thead class="table-dark text-center">
                         <tr>
-                            <th style="width: 30%;">⏰ Waktu</th>
-                            <th style="width: 35%;">🌍 Latitude</th>
-                            <th style="width: 35%;">🌍 Longitude</th>
+                            <th>No</th>
+                            <th>⏰ Waktu</th>
+                            <th>🌍 Latitude</th>
+                            <th>🌍 Longitude</th>
+                            <th>📍 Lokasi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($locations as $loc)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td class="fw-semibold text-center">{{ $loc->timestamp }}</td>
                             <td class="text-success fw-bold">{{ $loc->latitude }}</td>
                             <td class="text-primary fw-bold">{{ $loc->longitude }}</td>
+                            <td class="alamat" data-lat="{{ $loc->latitude }}" data-lon="{{ $loc->longitude }}">
+                                ⏳ Memuat...
+                            </td>
                         </tr>
                         @empty
                         <tr>
@@ -84,6 +92,23 @@
         </div>
     </div>
 
-
 </div>
 @endsection
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const alamatCells = document.querySelectorAll(".alamat");
+        alamatCells.forEach(async (cell) => {
+            let lat = cell.getAttribute("data-lat");
+            let lon = cell.getAttribute("data-lon");
+
+            try {
+                let res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                let data = await res.json();
+                cell.innerHTML = data.display_name || "❓ Tidak diketahui";
+            } catch (e) {
+                cell.innerHTML = "⚠️ Gagal memuat alamat";
+            }
+        });
+    });
+</script>

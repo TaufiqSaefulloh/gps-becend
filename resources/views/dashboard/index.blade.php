@@ -68,9 +68,13 @@
     <div class="card-header bg-secondary text-white">
         <strong>Daftar User</strong>
     </div>
+    <!-- Search Bar -->
+    <div class="p-3 d-flex align-items-center">
+        <input type="text" id="userSearch" class="form-control form-control-sm w-auto" placeholder="Cari user, email ...">
+    </div>
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-striped table-hover align-middle mb-0">
+            <table class="table table-striped table-hover align-middle mb-0" id="userTable">
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">No</th>
@@ -100,7 +104,6 @@
                                 class="btn btn-sm btn-primary">
                                 Lihat History
                             </a>
-
                         </td>
                     </tr>
                     @endforeach
@@ -110,3 +113,24 @@
     </div>
 </div>
 @endsection
+
+<!-- Script Filter Search -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('userSearch');
+        const table = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+
+        searchInput.addEventListener('keyup', function() {
+            const filter = searchInput.value.toLowerCase();
+            Array.from(table.rows).forEach(row => {
+                const name = row.cells[1].textContent.toLowerCase();
+                const email = row.cells[2].textContent.toLowerCase();
+                if (name.includes(filter) || email.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
