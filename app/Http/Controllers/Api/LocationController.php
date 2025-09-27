@@ -10,6 +10,7 @@ class LocationController extends Controller
 {
     public function store(Request $request)
     {
+        // \Log::info("Lokasi diterima: ", $request->all());
         $request->validate([
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',

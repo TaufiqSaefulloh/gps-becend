@@ -19,11 +19,15 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'nip',
         'name',
         'email',
         'password',
+        'id_ulp',
+        'role',     // 🔹 tambahin ini
         'api_token',
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -54,5 +58,9 @@ class User extends Authenticatable
     public function latestLocation()
     {
         return $this->hasOne(Location::class)->latestOfMany('timestamp');
+    }
+    public function ulp()
+    {
+        return $this->belongsTo(Ulp::class, 'id_ulp');
     }
 }

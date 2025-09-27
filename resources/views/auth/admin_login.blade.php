@@ -1,6 +1,6 @@
-@extends('layout.master')
+@extends('layout.login')
 
-@section('content')
+@section('login-content')
 <div class="d-flex justify-content-center align-items-center" style="min-height:100vh; background:#f4f6f9;">
     <div class="card shadow-lg" style="width: 400px; border-radius:15px;">
         <div class="card-body p-4">

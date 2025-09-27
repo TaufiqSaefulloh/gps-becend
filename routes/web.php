@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\AdminLoginController;
+use App\Http\Controllers\ClusterController;
+use App\Http\Controllers\UidController;
+use App\Http\Controllers\ProvinsiController;
+use App\Http\Controllers\UlpController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,4 +48,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     // Management User
     Route::resource('users', UserController::class);
+    Route::resource('cluster', ClusterController::class);
+    Route::resource('uid', UidController::class);
+    Route::resource('provinsi', ProvinsiController::class);
+    Route::resource('ulp', UlpController::class);
+    Route::post('/users/import', [UserController::class, 'import'])->name('users.import');
 });

@@ -10,7 +10,7 @@
 <script src="{{ asset('js/history_map_leaflet.js') }}"></script>
 @endsection
 
-@section('content')
+@section('page-content')
 <div class=" my-4">
 
     <!-- Title -->

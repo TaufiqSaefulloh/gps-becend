@@ -13,10 +13,12 @@ class DashboardController extends Controller
     {
         $date = $request->query('date', date('Y-m-d')); // ambil dari query atau default hari ini
 
-        // Ambil semua user beserta lokasi terbaru sesuai tanggal
+        // Ambil semua user kecuali admin (id=1) beserta lokasi terbaru sesuai tanggal
         $users = User::with(['locations' => function ($q) use ($date) {
-            $q->whereDate('timestamp', $date)->latest(); // ambil lokasi sesuai tanggal, urut terbaru
-        }])->get();
+            $q->whereDate('timestamp', $date)->latest(); // lokasi sesuai tanggal, urut terbaru
+        }])
+            ->where('id', '!=', 1) // filter user admin
+            ->get();
 
         // Map ke JSON untuk frontend
         $usersJson = $users->map(function ($user) {
@@ -24,7 +26,7 @@ class DashboardController extends Controller
             return [
                 'id' => $user->id,
                 'name' => $user->name,
-                'email' => $user->email,
+                'nip' => $user->nip, // ganti email dengan nip
                 'latestLocation' => $latest ? [
                     'latitude' => $latest->latitude,
                     'longitude' => $latest->longitude,
@@ -38,6 +40,7 @@ class DashboardController extends Controller
             'date' => $date
         ]);
     }
+
 
 
     public function history(Request $request)
