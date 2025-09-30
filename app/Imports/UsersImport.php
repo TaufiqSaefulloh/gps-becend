@@ -32,11 +32,19 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading
         $nip    = trim($row['nip'] ?? '');
         $email  = trim($row['email_aktif'] ?? '');
 
+        // Anggap "-" atau "" pada NIP sebagai kosong
+        if ($nip === '-' || $nip === '') {
+            $nip = null;
+        }
         // Skip row kosong
-        if (!$lokasi || !$nama || !$nip || !$email) return null;
+        // Validasi kolom wajib
+        if (empty($lokasi) || empty($nama) || empty($nip) || empty($email)) {
+            Log::warning("Row dilewati karena ada data kosong: " . json_encode($row));
+            return null; // skip baris ini
+        }
 
         // Matching ULP fleksibel
-        $ulp = collect(self::$ulps)->first(function($item) use ($lokasi) {
+        $ulp = collect(self::$ulps)->first(function ($item) use ($lokasi) {
             return stripos(strtolower($item->nama_ulp), $lokasi) !== false;
         });
 

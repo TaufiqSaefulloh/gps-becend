@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
             UidSeeder::class,
             ProvinsiSeeder::class,
             UlpSeeder::class,
-            UserSeeder::class,
-            LocationSeeder::class,
+            // UserSeeder::class,
+            // LocationSeeder::class,
         ]);
     }
 }
